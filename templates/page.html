@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block og_title %} - {% if not pstr %}Page {% endif %}{{ page }}{% endblock %}
+
+{% if style %}
+	{% block body_color %}{{ style['bodycolor'] }}{% endblock %}
+	{% block mid_color %}{{ style['midcolor'] }}{% endblock %}
+	{% block content_color %}{{ style['divcolor'] }}{% endblock %}
+	{% block text_color %}{{ style['textcolor'] }}{% endblock %}
+	{% block text2_color %}{{ style['text2color'] }}{% endblock %}
+	{% block body_class %}{{ style['bodyclass'] }}{% endblock %}
+{% endif %}
+
+{% block content %}
+
+{% if page == 'list' %}
+
+	<h1>You are Raymond Page List</h1>
+
+	<ol style="padding:0 15%">
+		{% for page in p.pages %}
+			{% if 'hidden' in p.pages[page] and p.pages[page]['hidden'] == True %}
+			{% else %}
+				<li><a href="/page/{{ page }}">{{ p.pages[page]['title'] }}</a></li>
+			{% endif %}
+		{% endfor %}
+	</ol>
+	
+{% else %}
+
+	<h1>{{ p.pages[page]['title'] }}</h1>
+
+	{% if p.pages[page]['embeds'] %}
+		{% for embed in p.pages[page]['embeds'] %}
+			{% if "https" in embed %}
+				<iframe src="{{ embed }}" frameborder="0"></iframe>
+			{% else %}
+				<img src="{{ embed }}"/>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+
+	{% if p.pages[page]['text'] %}
+		<p>
+			{% for text in p.pages[page]['text'] %}
+				{{ cformat(text) }}{% if not text == p.pages[page]['text'][-1] %}<br><br>{% endif %}
+			{% endfor %}
+		</p>
+	{% endif %}
+
+		{% if p.pages[page]['chatlog'] %}
+		<div class="chatlog">
+			<button onclick="toggleChatlog()">Toggle {{ p.pages[page]['chatlog']['name'] }}</button>
+			<p id="chatlog" style="display: none;">
+				{% for text in p.pages[page]['chatlog']['text'] %}
+					{{ cformat(text) }}{% if not text == p.pages[page]['chatlog']['text'][-1] %}<br>{% endif %}
+				{% endfor %}
+			</p>
+		</div>
+	{% endif %}
+
+	{% if not pstr %}
+		{% if page+1 not in p.pages or ('hidden' in p.pages[page+1] and p.pages[page+1]['hidden']) %}
+			<h2 style="margin:0;text-align:center"> more pages coming soon!</h2>
+			<h4 style="margin:0;padding:0;text-align:center"><a href="{{ a.discord }}">submit ideas for prompt in the discord server!</a></h4>	
+		{% else %}	
+			<h2 style="margin:0;text-align:left">> <a href="/page/{{ page+1 }}">{{ p.pages[page+1]['title'] }}</a></h2>
+		{% endif %}
+		{% if page-1 in p.pages %}
+			<h4 style="margin:2px 0 0 0;text-align:left"><a href="/page/{{ page-1 }}">go back</a> | <a href="/page/1">start over</a></h4>
+		{% endif %}
+	{% endif %}
+	
+{% endif %}
+{% endblock %}

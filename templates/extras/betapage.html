@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block og_title %} Beta - {% if not pstr %}Page {% endif %}{{ page }}{% endblock %}
+
+{% if style %}
+	{% block body_color %}{{ style['bodycolor'] }}{% endblock %}
+	{% block mid_color %}{{ style['midcolor'] }}{% endblock %}
+	{% block content_color %}{{ style['divcolor'] }}{% endblock %}
+	{% block text_color %}{{ style['textcolor'] }}{% endblock %}
+	{% block text2_color %}{{ style['text2color'] }}{% endblock %}
+	{% block body_class %}{{ style['bodyclass'] }}{% endblock %}
+{% endif %}
+
+{% block content %}
+
+{% if page == 'list' %}
+
+	<h1>You are Raymond Page List</h1>
+
+	<ol style="padding:0 15%">
+		{% for page in bp.pages %}
+			{% if 'hidden' in bp.pages[page] and bp.pages[page]['hidden'] == True %}
+			{% else %}
+				<li><a href="/beta/page/{{ page }}">{{ bp.pages[page]['title'] }}</a></li>
+			{% endif %}
+		{% endfor %}
+	</ol>
+	
+{% else %}
+
+	<h1>{{ bp.pages[page]['title'] }}</h1>
+
+	{% if bp.pages[page]['embeds'] %}
+		{% for embed in bp.pages[page]['embeds'] %}
+			{% if "https" in embed %}
+				<iframe src="{{ embed }}" frameborder="0"></iframe>
+			{% else %}
+				<img src="{{ embed }}"/>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+
+	{% if bp.pages[page]['text'] %}
+		<p>
+			{% for text in bp.pages[page]['text'] %}
+				{{ cformat(text) }}{% if not text == bp.pages[page]['text'][-1] %}<br><br>{% endif %}
+			{% endfor %}
+		</p>
+	{% endif %}
+
+	{% if not pstr %}
+		{% if page+1 not in bp.pages %}
+			<h4 style="margin:0;padding:0;text-align:center">this is the point where the You Are Raymond team gave up on the current story and decided to restart</h4>	
+		{% else %}	
+			<h2 style="margin:0;text-align:left">> <a href="/beta/page/{{ page+1 }}">{{ bp.pages[page+1]['title'] }}</a></h2>
+		{% endif %}
+		{% if page-1 in bp.pages %}
+			<h4 style="margin:2px 0 0 0;text-align:left"><a href="/beta/page/{{ page-1 }}">go back</a> | <a href="/page/1">start over</a></h4>
+		{% endif %}
+	{% endif %}
+	
+{% endif %}
+{% endblock %}

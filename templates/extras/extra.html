@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block og_title %} - Extras{% endblock %}
+
+{% block content %}
+
+	<h1>You are Raymond Extras</h1>
+
+	<ul style="padding:0 15%">
+		{% for extra in e.extras %}
+			<li><a href="{{ e.extras[extra]['path'] }}">{{ e.extras[extra]['title'] }}</a>{% if e.extras[extra]['link'] %} [<a href="{{ e.extras[extra]['link'][1] }}">{{ e.extras[extra]['link'][0] }}</a>]{% endif %}</li>
+		{% endfor %}
+	</ul>
+	
+{% endblock %}

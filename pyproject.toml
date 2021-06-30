@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "repl_python3_youareraymond"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+routes = "^2.4.1"
+waitress = "^1.4.4"
+data = "^0.4"
+flask = "^1.1.2"
+markupsafe = "^1.1.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
